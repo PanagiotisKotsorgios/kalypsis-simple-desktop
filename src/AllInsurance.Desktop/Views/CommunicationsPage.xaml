@@ -1,0 +1,142 @@
+<Page x:Class="AllInsurance.Desktop.Views.CommunicationsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:AllInsurance.Desktop.Controls"
+      Background="{ThemeResource PageBackgroundBrush}">
+    <Grid Margin="16,12" RowDefinitions="Auto,Auto,1.2*,Auto,2*" RowSpacing="10">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <StackPanel Spacing="3">
+                <TextBlock Text="Ενημέρωση" FontSize="28" FontWeight="SemiBold" />
+                <TextBlock Text="Επιλογή παραληπτών από ασφαλιστήρια που λήγουν και σύνταξη μηνυμάτων"
+                           Foreground="{ThemeResource SecondaryTextBrush}" TextWrapping="Wrap" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <TextBlock x:Name="CreditsText" Text="SMS credits: —" VerticalAlignment="Center" FontWeight="SemiBold" />
+                <controls:ActionButton Kind="Add" Label="Προσθήκη credits" Click="Credits_Click" />
+                <controls:ActionButton Kind="Edit" Label="Ρυθμίσεις αποστολής" Click="Settings_Click" />
+            </StackPanel>
+        </Grid>
+        <Border Grid.Row="1" Background="{ThemeResource CardBackgroundBrush}" CornerRadius="14" Padding="14">
+            <StackPanel Spacing="9">
+                <TextBox x:Name="SearchInput" Header="Αναζήτηση" PlaceholderText="Πελάτης, αριθμός, εταιρεία ή κλάδος"
+                         TextChanged="FiltersChanged" />
+                <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="205" ItemHeight="76">
+                    <ComboBox x:Name="ChannelChoice" Header="Κανάλι" Width="195" SelectionChanged="ChannelChanged">
+                        <ComboBoxItem Content="SMS" /><ComboBoxItem Content="Email" />
+                    </ComboBox>
+                    <ComboBox x:Name="DocumentFilter" Header="Είδος εγγράφου" Width="195" SelectionChanged="FiltersChanged">
+                        <ComboBoxItem Content="Όλα" /><ComboBoxItem Content="Ασφαλιστήρια" />
+                        <ComboBoxItem Content="Αιτήσεις" /><ComboBoxItem Content="Ειδοποιητήρια" />
+                    </ComboBox>
+                    <ComboBox x:Name="CompanyFilter" Header="Εταιρεία" Width="195" SelectionChanged="FiltersChanged" />
+                    <StackPanel><TextBlock Text="Λήξη από" /><controls:EditableDateInput x:Name="FromDate" Width="195" Height="42" DateChanged="FiltersChanged" /></StackPanel>
+                    <StackPanel><TextBlock Text="Λήξη έως" /><controls:EditableDateInput x:Name="UntilDate" Width="195" Height="42" DateChanged="FiltersChanged" /></StackPanel>
+                </VariableSizedWrapGrid>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="2" Background="{ThemeResource CardBackgroundBrush}" CornerRadius="14" Padding="12">
+            <Grid RowDefinitions="Auto,*,Auto">
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                        <controls:VisibleSelectionCheckBox x:Name="SelectAll" Checked="SelectAll_Changed"
+                              Unchecked="SelectAll_Changed" />
+                        <TextBlock Text="Επιλογή όλων" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock x:Name="RecipientsText" Grid.Column="1" VerticalAlignment="Center" />
+                    <controls:ActionButton Grid.Column="2" Kind="Open" Label="Καρτέλα ασφαλιστηρίου"
+                                           Click="OpenPolicy_Click" />
+                </Grid>
+                <ListView x:Name="RecipientsList" Grid.Row="1" SelectionMode="Single" Padding="0"
+                          BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="1"
+                          DoubleTapped="Recipient_DoubleTapped">
+                    <ListView.Header>
+                        <Grid ColumnDefinitions="42,2*,1.6*,1.3*,1*,1.5*,1.1*,1*"
+                              Background="{ThemeResource TableHeaderBackgroundBrush}" Height="40">
+                            <Border BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" />
+                            <Border Grid.Column="1" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" Padding="8,0"><TextBlock Text="Πελάτης" VerticalAlignment="Center" FontWeight="SemiBold" /></Border>
+                            <Border Grid.Column="2" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" Padding="8,0"><TextBlock Text="Email" VerticalAlignment="Center" FontWeight="SemiBold" /></Border>
+                            <Border Grid.Column="3" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" Padding="8,0"><TextBlock Text="Τηλέφωνο" VerticalAlignment="Center" FontWeight="SemiBold" /></Border>
+                            <Border Grid.Column="4" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" Padding="8,0"><TextBlock Text="Αποστολή" VerticalAlignment="Center" FontWeight="SemiBold" /></Border>
+                            <Border Grid.Column="5" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" Padding="8,0"><TextBlock Text="Ασφαλιστήριο" VerticalAlignment="Center" FontWeight="SemiBold" /></Border>
+                            <Border Grid.Column="6" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" Padding="8,0"><TextBlock Text="Λήξη" VerticalAlignment="Center" FontWeight="SemiBold" /></Border>
+                            <Border Grid.Column="7" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,0,1" Padding="8,0"><TextBlock Text="Είδος" VerticalAlignment="Center" FontWeight="SemiBold" /></Border>
+                        </Grid>
+                    </ListView.Header>
+                </ListView>
+                <StackPanel x:Name="ExportHost" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0" />
+            </Grid>
+        </Border>
+        <TextBlock Grid.Row="3" Text="Σύνταξη μηνύματος" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" />
+        <Border Grid.Row="4" Background="{ThemeResource CardBackgroundBrush}" CornerRadius="14" Padding="14">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto"
+                          HorizontalScrollBarVisibility="Disabled" HorizontalScrollMode="Disabled">
+            <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="10" Padding="0,0,8,0">
+                <StackPanel Spacing="8">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <ComboBox x:Name="TemplateChoice" Header="Πρότυπο μηνύματος" Width="250"
+                              SelectionChanged="Template_Changed" />
+                    <controls:ActionButton Kind="Add" Label="Αποθήκευση προτύπου" Click="SaveTemplate_Click" />
+                    <controls:ActionButton Kind="Delete" Label="Διαγραφή προτύπου" Click="DeleteTemplate_Click" />
+                </StackPanel>
+                <StackPanel x:Name="EmailHeader" Spacing="8" Visibility="Collapsed">
+                    <TextBox x:Name="SubjectInput" Header="Θέμα email" PlaceholderText="π.χ. Υπενθύμιση ανανέωσης ασφαλιστηρίου" />
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <Button Content="B" FontWeight="Bold" ToolTipService.ToolTip="Έντονα" Click="Bold_Click" />
+                            <Button Content="I" FontStyle="Italic" ToolTipService.ToolTip="Πλάγια" Click="Italic_Click" />
+                            <Button Content="U" ToolTipService.ToolTip="Υπογράμμιση" Click="Underline_Click" />
+                            <ComboBox x:Name="FontChoice" Width="120" PlaceholderText="Γραμματοσειρά"
+                                      SelectionChanged="Font_Changed">
+                                <ComboBoxItem Content="Segoe UI" /><ComboBoxItem Content="Arial" />
+                                <ComboBoxItem Content="Calibri" /><ComboBoxItem Content="Georgia" />
+                            </ComboBox>
+                            <ComboBox x:Name="FontSizeChoice" Width="78" PlaceholderText="Μέγεθος"
+                                      SelectionChanged="FontSize_Changed">
+                                <ComboBoxItem Content="10" /><ComboBoxItem Content="12" />
+                                <ComboBoxItem Content="14" /><ComboBoxItem Content="16" />
+                                <ComboBoxItem Content="18" /><ComboBoxItem Content="22" />
+                                <ComboBoxItem Content="26" />
+                            </ComboBox>
+                            <ComboBox x:Name="TextColorChoice" Width="115" PlaceholderText="Χρώμα κειμένου"
+                                      SelectionChanged="TextColor_Changed">
+                                <ComboBoxItem Content="Αυτόματο" Tag="default" />
+                                <ComboBoxItem Content="Μαύρο" Tag="#20262D" />
+                                <ComboBoxItem Content="Μπλε" Tag="#176FAB" />
+                                <ComboBoxItem Content="Πράσινο" Tag="#25824A" />
+                                <ComboBoxItem Content="Κόκκινο" Tag="#B83B3B" />
+                                <ComboBoxItem Content="Πορτοκαλί" Tag="#B86725" />
+                                <ComboBoxItem Content="Μωβ" Tag="#7846A3" />
+                            </ComboBox>
+                            <Button Content="≡" ToolTipService.ToolTip="Στοίχιση αριστερά" Click="AlignLeft_Click" />
+                            <Button Content="☷" ToolTipService.ToolTip="Στοίχιση στο κέντρο" Click="AlignCenter_Click" />
+                            <Button Content="• Λίστα" ToolTipService.ToolTip="Προσθήκη κουκκίδας" Click="Bullet_Click" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </StackPanel>
+                </StackPanel>
+                <TextBox x:Name="SmsBody" Grid.Row="1" AcceptsReturn="True" TextWrapping="Wrap"
+                         Height="260" PlaceholderText="Γράψτε το σύντομο SMS..." TextChanged="SmsBody_Changed" />
+                <Grid x:Name="EmailEditorPanel" Grid.Row="1" RowDefinitions="Auto,Auto,Auto"
+                      RowSpacing="6" Visibility="Collapsed" MinHeight="150">
+                    <TextBlock Text="Κυρίως μήνυμα email" FontWeight="SemiBold" />
+                    <RichEditBox x:Name="EmailBody" Grid.Row="1" Height="320" MinHeight="220"
+                                 VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="1" />
+                    <Slider x:Name="EditorHeightSlider" Grid.Row="2" Header="Ύψος κυρίως μηνύματος"
+                            Minimum="220" Maximum="700" Value="320" StepFrequency="20"
+                            ValueChanged="EditorHeight_Changed" />
+                </Grid>
+                <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <TextBlock x:Name="ComposeStatus" VerticalAlignment="Center" TextWrapping="Wrap" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                        <controls:ActionButton Kind="File" Label="Αποθήκευση πρόχειρου" Click="SaveDraft_Click" />
+                        <controls:ActionButton Kind="Open" Label="Προεπισκόπηση" Click="Preview_Click" />
+                        <controls:ActionButton x:Name="SendButton" Kind="Add" Label="Αποστολή" Click="Send_Click" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</Page>

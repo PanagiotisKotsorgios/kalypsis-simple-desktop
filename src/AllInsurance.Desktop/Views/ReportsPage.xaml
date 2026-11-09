@@ -1,0 +1,91 @@
+<Page x:Class="AllInsurance.Desktop.Views.ReportsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:AllInsurance.Desktop.Controls"
+      Background="{ThemeResource PageBackgroundBrush}">
+    <Grid x:Name="PageLayout" Margin="16,12" RowDefinitions="Auto,Auto,Auto,*" RowSpacing="12">
+        <StackPanel Spacing="3">
+            <TextBlock Text="Αναφορές και πίνακες παραγωγής" FontSize="28" FontWeight="SemiBold" />
+            <TextBlock x:Name="ReportSubtitle" Text="Παραγωγή, οικονομικά, πελάτες, συνεργάτες, ζημιές και οχήματα"
+                       Foreground="{ThemeResource SecondaryTextBrush}" />
+        </StackPanel>
+        <Border Grid.Row="1" Background="{ThemeResource CardBackgroundBrush}" CornerRadius="14" Padding="14">
+            <StackPanel Spacing="8">
+                <ComboBox x:Name="ReportType" Header="Προβολή" Width="230" SelectionChanged="FiltersChanged">
+                    <ComboBoxItem Content="Σύνοψη" /><ComboBoxItem Content="Παραγωγή ασφαλιστηρίων" />
+                    <ComboBoxItem Content="Ασφαλιστικές / αποδόσεις" /><ComboBoxItem Content="Συνεργάτες / προμήθειες" />
+                    <ComboBoxItem Content="Πελάτες / υπόλοιπα" /><ComboBoxItem Content="Ζημιές" />
+                    <ComboBoxItem Content="Οχήματα" /><ComboBoxItem Content="Κινήσεις πελατών" />
+                    <ComboBoxItem Content="Εισπράξεις" /><ComboBoxItem Content="Πίνακες παραγωγής" />
+                </ComboBox>
+                <StackPanel x:Name="GeneralFilters" Spacing="10">
+                <TextBox x:Name="SearchInput" Header="Αναζήτηση στην αναφορά" PlaceholderText="Αριθμός, πρόσωπο, εταιρεία ή κατάσταση"
+                         TextChanged="FiltersChanged" />
+                <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="205" ItemHeight="76">
+                    <ComboBox x:Name="DateBasis" Header="Ημερομηνία παραγωγής" Width="195"
+                              SelectedIndex="0" SelectionChanged="FiltersChanged">
+                        <ComboBoxItem Content="Έκδοση" /><ComboBoxItem Content="Έναρξη" />
+                    </ComboBox>
+                    <ComboBox x:Name="MonthFilter" Header="Μήνας" Width="195"
+                              SelectionChanged="Month_Changed" />
+                    <ComboBox x:Name="CompanyFilter" Header="Εταιρεία" Width="195" SelectionChanged="FiltersChanged" />
+                    <ComboBox x:Name="BranchFilter" Header="Κλάδος" Width="195" SelectionChanged="FiltersChanged" />
+                    <ComboBox x:Name="PartnerFilter" Header="Συνεργάτης" Width="195" SelectionChanged="FiltersChanged" />
+                    <ComboBox x:Name="ReceiptCustomerFilter" Header="Πελάτης" Width="195"
+                              Visibility="Collapsed" SelectionChanged="FiltersChanged" />
+                    <ComboBox x:Name="ReceiptMethodFilter" Header="Τρόπος πληρωμής" Width="195"
+                              Visibility="Collapsed" SelectionChanged="FiltersChanged" />
+                    <StackPanel><TextBlock Text="Από" /><controls:EditableDateInput x:Name="FromDate" Width="195" Height="42" DateChanged="FiltersChanged" /></StackPanel>
+                    <StackPanel><TextBlock Text="Έως" /><controls:EditableDateInput x:Name="UntilDate" Width="195" Height="42" DateChanged="FiltersChanged" /></StackPanel>
+                </VariableSizedWrapGrid>
+                </StackPanel>
+                <StackPanel x:Name="ProductionFilters" Visibility="Collapsed">
+                    <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="178" ItemHeight="40">
+                        <ComboBox x:Name="GroupingMode" Width="170" SelectedIndex="0"
+                                  SelectionChanged="FiltersChanged">
+                            <ComboBoxItem Content="Συνεργάτης και εταιρεία" />
+                            <ComboBoxItem Content="Ανά εταιρεία" />
+                            <ComboBoxItem Content="Ανά συνεργάτη" />
+                            <ComboBoxItem Content="Ανά κλάδο" />
+                            <ComboBoxItem Content="Ανά πελάτη" />
+                            <ComboBoxItem Content="Ανά πακέτο" />
+                        </ComboBox>
+                        <controls:MultiSelectFilter x:Name="ProductionCompanies" Width="170" Title="Εταιρείες" />
+                        <controls:MultiSelectFilter x:Name="ProductionBranches" Width="170" Title="Κλάδοι" />
+                        <controls:MultiSelectFilter x:Name="ProductionCoverages" Width="170" Title="Καλύψεις" />
+                        <controls:MultiSelectFilter x:Name="ProductionPackages" Width="170" Title="Πακέτα" />
+                        <controls:MultiSelectFilter x:Name="ProductionPartners" Width="170" Title="Συνεργάτες" />
+                        <controls:MultiSelectFilter x:Name="ProductionCustomers" Width="170" Title="Πελάτες" />
+                    </VariableSizedWrapGrid>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <StackPanel Spacing="2" VerticalAlignment="Center">
+                <TextBlock x:Name="SummaryText" FontWeight="SemiBold" FontSize="16" />
+                <TextBlock x:Name="DetailText" Foreground="{ThemeResource SecondaryTextBrush}" TextWrapping="Wrap" />
+            </StackPanel>
+            <controls:ActionButton x:Name="ReportColumnsButton" Grid.Column="1" Kind="Columns"
+                                   Label="Διαχείριση στηλών" Click="Columns_Click" Visibility="Collapsed" />
+        </Grid>
+        <Border Grid.Row="3" Background="{ThemeResource CardBackgroundBrush}" CornerRadius="14" Padding="12">
+            <Grid x:Name="ReportTableGrid" RowDefinitions="*,Auto">
+                <ScrollViewer x:Name="ReportTableViewport" HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Disabled" SizeChanged="ReportTableViewport_SizeChanged">
+                    <StackPanel x:Name="ReportTableStack" HorizontalAlignment="Left">
+                <Grid x:Name="ReportHeaderGrid" ColumnDefinitions="260,230,130,130,185,185" Background="{ThemeResource TableHeaderBackgroundBrush}">
+                    <Border BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" Padding="10,9"><TextBlock x:Name="HeadA" FontWeight="SemiBold" /></Border>
+                    <Border Grid.Column="1" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" Padding="10,9"><TextBlock x:Name="HeadB" FontWeight="SemiBold" /></Border>
+                    <Border Grid.Column="2" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" Padding="10,9"><TextBlock x:Name="HeadC" FontWeight="SemiBold" /></Border>
+                    <Border Grid.Column="3" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" Padding="10,9"><TextBlock x:Name="HeadD" FontWeight="SemiBold" /></Border>
+                    <Border Grid.Column="4" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,1" Padding="10,9"><TextBlock x:Name="HeadE" FontWeight="SemiBold" /></Border>
+                    <Border Grid.Column="5" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,0,1" Padding="10,9"><TextBlock x:Name="HeadF" FontWeight="SemiBold" /></Border>
+                </Grid>
+                <ListView x:Name="ReportList" SelectionMode="None" Height="420" Padding="0"
+                          HorizontalAlignment="Left" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

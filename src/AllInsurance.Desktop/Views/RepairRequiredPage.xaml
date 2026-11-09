@@ -1,0 +1,25 @@
+<Page
+    x:Class="AllInsurance.Desktop.Views.RepairRequiredPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Background="{ThemeResource PageBackgroundBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid>
+        <Border MaxWidth="500" Margin="12" Padding="20" Background="{ThemeResource CardBackgroundBrush}" CornerRadius="12"
+                HorizontalAlignment="Stretch" VerticalAlignment="Center">
+            <StackPanel Spacing="10">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <Image Source="ms-appx:///Assets/kalypsis-simple.png" Width="44" Height="44" AutomationProperties.Name="Λογότυπο KALYPSIS SIMPLE SOFTWARE" />
+                    <TextBlock Text="KALYPSIS SIMPLE SOFTWARE" Foreground="{ThemeResource BrandAccentBrush}" FontSize="13" FontWeight="Bold" VerticalAlignment="Center" />
+                </StackPanel>
+                <TextBlock Text="Απαιτείται ανάκτηση διαχειριστή" FontSize="28"
+                           FontWeight="SemiBold" TextWrapping="Wrap" />
+                <TextBlock Text="Η υπάρχουσα βάση δεδομένων δεν έχει ενεργό διαχειριστή. Η εφαρμογή δεν θα δημιουργήσει αυτόματα νέο λογαριασμό."
+                           Foreground="{ThemeResource SecondaryTextBrush}" TextWrapping="Wrap" />
+                <TextBlock Text="Επαναφέρετε ασφαλές αντίγραφο της βάσης ή επικοινωνήστε με τον εξουσιοδοτημένο διαχειριστή για ανάκτηση μετά από επαλήθευση ταυτότητας. Μη διαγράψετε τη βάση δεδομένων."
+                           Foreground="{ThemeResource SecondaryTextBrush}" TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+        </Grid>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>KalypsisSimple.Desktop</AssemblyName>
+    <Version>1.0.0</Version>
+    <Title>KALYPSIS SIMPLE SOFTWARE</Title>
+    <Product>KALYPSIS SIMPLE SOFTWARE</Product>
+    <Company>KALYPSIS SOFTWARE SOLUTIONS</Company>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <EnableMsixTooling>false</EnableMsixTooling>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <ApplicationIcon>Assets\kalypsis-simple.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\kalypsis-simple.png" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\kalypsis-simple.ico" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\Icons\*.svg" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\Sections\*.png" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\Reference\*.txt" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Assets\Icons\LICENSE-lucide.txt" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AllInsurance.Application\AllInsurance.Application.csproj" />
+    <ProjectReference Include="..\AllInsurance.Infrastructure\AllInsurance.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

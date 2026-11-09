@@ -1,0 +1,45 @@
+<Page
+    x:Class="AllInsurance.Desktop.Views.AdministratorSetupPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:AllInsurance.Desktop.Controls"
+    Background="{ThemeResource PageBackgroundBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid>
+            <Border MaxWidth="440" Margin="12" Padding="20" Background="{ThemeResource CardBackgroundBrush}" CornerRadius="12"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <StackPanel Spacing="10">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Image Source="ms-appx:///Assets/kalypsis-simple.png" Width="44" Height="44" AutomationProperties.Name="Λογότυπο KALYPSIS SIMPLE SOFTWARE" />
+                        <TextBlock Text="KALYPSIS SIMPLE SOFTWARE" Foreground="{ThemeResource BrandAccentBrush}" FontSize="13" FontWeight="Bold" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock Text="Ρύθμιση εφαρμογής" FontSize="30" FontWeight="SemiBold"
+                               TextWrapping="Wrap" />
+                    <TextBlock Text="Δημιουργήστε τον πρώτο λογαριασμό διαχειριστή σε αυτόν τον υπολογιστή." Foreground="{ThemeResource SecondaryTextBrush}"
+                               FontSize="15" TextWrapping="Wrap" />
+                    <TextBlock Text="Όνομα χρήστη" />
+                    <TextBox x:Name="UsernameInput" Text="{Binding Username, Mode=TwoWay}"
+                             AutomationProperties.Name="Όνομα χρήστη" />
+                    <TextBlock Text="Ονοματεπώνυμο" />
+                    <TextBox Text="{Binding DisplayName, Mode=TwoWay}"
+                             AutomationProperties.Name="Ονοματεπώνυμο" />
+                    <TextBlock Text="Κωδικός πρόσβασης" />
+                    <PasswordBox x:Name="PasswordInput" PasswordChanged="PasswordChanged"
+                                 AutomationProperties.Name="Κωδικός πρόσβασης" />
+                    <TextBlock Text="Επιβεβαίωση κωδικού" />
+                    <PasswordBox x:Name="ConfirmationInput" PasswordChanged="ConfirmationChanged"
+                                 AutomationProperties.Name="Επιβεβαίωση κωδικού" />
+                    <CheckBox Content="Εμφάνιση κωδικών" Checked="ShowPasswordsChanged"
+                              Unchecked="ShowPasswordsChanged" />
+                    <TextBlock Text="Χρησιμοποιήστε κωδικό με τουλάχιστον 12 χαρακτήρες."
+                               Foreground="{ThemeResource SecondaryTextBrush}" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding ErrorMessage}" Foreground="{ThemeResource ErrorTextBrush}"
+                               TextWrapping="Wrap" AutomationProperties.LiveSetting="Assertive" />
+                    <ProgressRing IsActive="{Binding IsBusy}" Width="24" Height="24"
+                                  HorizontalAlignment="Center" />
+                    <controls:ActionButton Kind="Add" Label="Δημιουργία διαχειριστή" Command="{Binding CreateAdministratorCommand}" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</Page>

@@ -1,0 +1,121 @@
+<Page
+    x:Class="AllInsurance.Desktop.Views.CustomersPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:AllInsurance.Desktop.Controls"
+    Background="{ThemeResource PageBackgroundBrush}">
+    <Grid x:Name="PageContent" Margin="16,8,16,8" RowDefinitions="Auto,*" RowSpacing="8"
+          SizeChanged="PageContent_SizeChanged">
+            <Border Background="{ThemeResource CardBackgroundBrush}" CornerRadius="16" Padding="12,8">
+                <StackPanel Spacing="7">
+                    <StackPanel Orientation="Horizontal" Spacing="12" Height="28" VerticalAlignment="Center">
+                        <TextBlock Text="Φίλτρα" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        <TextBlock x:Name="TotalBadge" Text="0 εγγραφές" VerticalAlignment="Center"
+                                   Foreground="{ThemeResource BrandAccentBrush}" FontWeight="SemiBold" />
+                        <TextBlock x:Name="SelectedBadge" Text="0 επιλεγμένοι" VerticalAlignment="Center"
+                                   Foreground="{ThemeResource SecondaryTextBrush}" />
+                        <controls:ActionButton Kind="Columns" Label="Διαχείριση στηλών" IconOnly="True"
+                                               Width="40" Height="28" Click="Columns_Click" />
+                    </StackPanel>
+                    <Border Height="46" CornerRadius="9" BorderBrush="#7C91A7"
+                            BorderThickness="1.5" Padding="1">
+                    <Grid>
+                        <TextBox x:Name="SearchInput" Height="42" MinHeight="42" CornerRadius="7"
+                                 BorderThickness="0" Padding="42,7,12,7" VerticalContentAlignment="Center"
+                                 PlaceholderText="Αναζήτηση: π.χ. Βιλλίου, 123456789, C-000001, 693..., email ή πόλη"
+                                 TextChanged="Filter_Changed" AutomationProperties.Name="Αναζήτηση πελατών" />
+                        <controls:SearchGlyph Width="24" Height="24" Margin="12,0,0,0"
+                                              HorizontalAlignment="Left" VerticalAlignment="Center"
+                                              IsHitTestVisible="False" />
+                    </Grid>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                        <StackPanel x:Name="InlineFiltersHost" Orientation="Horizontal">
+                            <StackPanel x:Name="FilterBar" Orientation="Horizontal" Spacing="8">
+                                <controls:MultiSelectFilter x:Name="BalanceFilter" Title="Υπόλοιπο" Width="170" Height="36" />
+                                <controls:MultiSelectFilter x:Name="KindFilter" Title="Είδος" Width="170" Height="36" />
+                                <controls:MultiSelectFilter x:Name="CityFilter" Title="Πόλη" Width="170" Height="36" />
+                                <controls:MultiSelectFilter x:Name="PartnerFilter" Title="Συνεργάτης" Width="170" Height="36" />
+                            </StackPanel>
+                        </StackPanel>
+                        <controls:ActionButton x:Name="ShowFiltersButton" Kind="Choice" Label="Φίλτρα" Width="100"
+                                               Height="36" Visibility="Collapsed">
+                            <controls:ActionButton.Flyout>
+                                <Flyout><StackPanel x:Name="PopupFiltersHost" Width="240" Spacing="8" /></Flyout>
+                            </controls:ActionButton.Flyout>
+                        </controls:ActionButton>
+                        <controls:ActionButton x:Name="ClearFiltersButton" Kind="Clear" Label="Καθαρισμός φίλτρων"
+                                               Width="185" Height="36" Click="ClearFilters_Click" />
+                        <controls:ActionButton x:Name="AddButton" Kind="Add" Label="Προσθήκη πελάτη"
+                                               Width="180" Height="36" Click="Add_Click" />
+                        <controls:ActionButton x:Name="DeleteButton" Kind="Delete" Label="Διαγραφή πελάτη"
+                                               Width="175" Height="36" Click="Delete_Click" />
+                        <controls:ActionButton x:Name="BatchButton" Kind="Choice" Label="Μαζικές κινήσεις"
+                                               Width="175" Height="36">
+                            <controls:ActionButton.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="Μαζική είσπραξη" Click="BulkReceipt_Click" />
+                                    <MenuFlyoutItem Text="Μαζική πληρωμή" Click="BulkPayment_Click" />
+                                </MenuFlyout>
+                            </controls:ActionButton.Flyout>
+                        </controls:ActionButton>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <Border Grid.Row="1" Background="{ThemeResource CardBackgroundBrush}" CornerRadius="16" Padding="14,10">
+                <Grid RowDefinitions="Auto,*,Auto" RowSpacing="0">
+                    <TextBlock x:Name="StatusText" TextWrapping="Wrap" Visibility="Collapsed" Margin="0,0,0,8"
+                               AutomationProperties.LiveSetting="Assertive" />
+                    <ScrollViewer x:Name="TableViewport" Grid.Row="1" SizeChanged="TableViewport_SizeChanged"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  VerticalScrollBarVisibility="Disabled">
+                        <StackPanel x:Name="TableStack" Width="1590" HorizontalAlignment="Left">
+                            <Border Background="{ThemeResource TableHeaderBackgroundBrush}" Padding="0"
+                                    BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="1"
+                                    CornerRadius="8">
+                                <Grid ColumnDefinitions="40,*">
+                                    <controls:VisibleSelectionCheckBox x:Name="SelectAllCustomers" VerticalAlignment="Center"
+                                              HorizontalAlignment="Center" ToolTipService.ToolTip="Επιλογή όλων των αποτελεσμάτων"
+                                              Checked="SelectAllCustomers_Changed" Unchecked="SelectAllCustomers_Changed" />
+                                <Grid x:Name="TableHeader" Grid.Column="1" ColumnSpacing="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="125" /><ColumnDefinition Width="130" />
+                                        <ColumnDefinition Width="155" /><ColumnDefinition Width="155" />
+                                        <ColumnDefinition Width="180" /><ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="220" />
+                                        <ColumnDefinition Width="140" /><ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,0" Padding="10,8"><TextBlock Text="Κωδικός" FontWeight="SemiBold" /></Border>
+                                    <Border Grid.Column="1" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,0" Padding="10,8"><TextBlock Text="Είδος" FontWeight="SemiBold" /></Border>
+                                    <Border Grid.Column="2" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,0" Padding="10,8"><TextBlock Text="Επώνυμο" FontWeight="SemiBold" /></Border>
+                                    <Border Grid.Column="3" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,0" Padding="10,8"><TextBlock Text="Όνομα" FontWeight="SemiBold" /></Border>
+                                    <Border Grid.Column="4" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,0" Padding="10,8"><TextBlock Text="Επωνυμία" FontWeight="SemiBold" /></Border>
+                                    <Border Grid.Column="5" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,0" Padding="10,8"><TextBlock Text="ΑΦΜ" FontWeight="SemiBold" /></Border>
+                                    <Border Grid.Column="6" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,0" Padding="10,8"><TextBlock Text="Email" FontWeight="SemiBold" /></Border>
+                                    <Border Grid.Column="7" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,1,0" Padding="10,8"><TextBlock Text="Πόλη" FontWeight="SemiBold" /></Border>
+                                    <Border Grid.Column="8" BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="0,0,0,0" Padding="10,8"><TextBlock Text="Υπόλοιπο" FontWeight="SemiBold" /></Border>
+                                </Grid>
+                                </Grid>
+                            </Border>
+                            <ListView x:Name="CustomersList" IsItemClickEnabled="True" Padding="0"
+                                      BorderBrush="{ThemeResource TableBorderBrush}" BorderThickness="1,0,1,1"
+                                      SelectionMode="Single"
+                                      SelectionChanged="Customers_SelectionChanged"
+                                      Height="460" AutomationProperties.Name="Πίνακας πελατών">
+
+                            </ListView>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="12" Margin="0,8,0,0">
+                        <TextBlock x:Name="PageText" VerticalAlignment="Center" />
+                        <StackPanel x:Name="PaginationActions" Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                            <controls:ActionButton Kind="Previous" Label="Προηγούμενη"
+                                                   Click="Previous_Click" />
+                            <controls:ActionButton Kind="Next" Label="Επόμενη"
+                                                   Click="Next_Click" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+    </Grid>
+</Page>
