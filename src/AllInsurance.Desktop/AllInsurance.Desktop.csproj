@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <AssemblyName>KalypsisSimple.Desktop</AssemblyName>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Title>KALYPSIS SIMPLE SOFTWARE</Title>
     <Product>KALYPSIS SIMPLE SOFTWARE</Product>
     <Company>KALYPSIS SOFTWARE SOLUTIONS</Company>
