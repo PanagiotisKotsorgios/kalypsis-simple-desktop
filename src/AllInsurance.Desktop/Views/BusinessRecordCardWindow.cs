@@ -132,7 +132,7 @@ public sealed partial class BusinessRecordCardWindow : Window
             area.Y + (area.Height - height) / 2, width, height));
         appWindow.Title = section == "policies" ? "Καρτέλα ασφάλισης — KALYPSIS SIMPLE SOFTWARE" :
             "Καρτέλα οχήματος — KALYPSIS SIMPLE SOFTWARE";
-        appWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "kalypsis-simple.ico"));
+        appWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "allinsurance.ico"));
         _root.Children.Add(new TextBlock { Text = "Φόρτωση καρτέλας...", Margin = new Thickness(24) });
         _ = LoadAsync();
     }
@@ -431,11 +431,8 @@ public sealed partial class BusinessRecordCardWindow : Window
     private Button OrganizationLinkButton(string section, Func<string> name,
         IReadOnlyList<BusinessRecord> organizations)
     {
-        var button = new Button { Content = new FontIcon { Glyph = "\uE8A7",
-            FontFamily = new Microsoft.UI.Xaml.Media.FontFamily("Segoe MDL2 Assets") },
-            Width = 34, Height = 34, Padding = new Thickness(0),
-            Background = new SolidColorBrush(Color.FromArgb(255, 23, 111, 171)),
-            Foreground = new SolidColorBrush(Colors.White) };
+        var button = LinkedCardButton(section == "companies" ?
+            "Άνοιγμα ασφαλιστικής εταιρείας" : "Άνοιγμα πρακτορείου");
         ToolTipService.SetToolTip(button, section == "companies" ?
             "Άνοιγμα ασφαλιστικής εταιρείας" : "Άνοιγμα πρακτορείου");
         ButtonMotion.Attach(button);
@@ -1096,6 +1093,8 @@ public sealed partial class BusinessRecordCardWindow : Window
             UpdateConvertButton();
             ApplyEditMode();
             RecordSaved?.Invoke(this, EventArgs.Empty);
+            if (_section == "policies" && _policyHistoryPager is not null)
+                await RefreshPolicyHistoryAsync(_policyHistoryPager);
             _status.Text = "Η καρτέλα αποθηκεύτηκε.";
             await UiAlerts.ShowSuccessAsync(_root.XamlRoot,
                 wasConversion ? "Το ασφαλιστήριο εκδόθηκε και παραδόθηκε στον πελάτη." :
